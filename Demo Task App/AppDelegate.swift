@@ -10,10 +10,16 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let inititalViewContoller = storyboard.instantiateViewController(withIdentifier: "ViewController")
+        let obj = UINavigationController.init(rootViewController: inititalViewContoller)
+        window?.rootViewController = obj
+        window?.makeKeyAndVisible()
         return true
     }
 

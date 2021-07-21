@@ -8,6 +8,6 @@
 import UIKit
 
 struct APIUrl {
-    static let getUrl = "https://api.jsonbin.io/b/60df9dbd9328b059d7b54d39/1"
-
+    static let getUrl = "https://api.jsonbin.io/b/60df9dbd9328b059d7b54d39/2"
 }
+

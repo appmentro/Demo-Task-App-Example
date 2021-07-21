@@ -14,11 +14,10 @@ class ViewController: UIViewController{
     var responseArr = Array<Any>()
     var cat1Dictionary = [String: Any]()
     let refreshControl = UIRefreshControl()
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        reloadDataMeyhod()
+        reloadDataMethod()
         registerTableViewCell()
         getServerData()
     }

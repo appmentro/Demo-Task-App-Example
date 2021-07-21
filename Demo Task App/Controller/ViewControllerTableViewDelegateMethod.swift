@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension ViewController: UITableViewDelegate, UITableViewDataSource, PopUpMethods {
     //MARK-: UITableView Delegate and Datasourse Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
@@ -18,57 +18,31 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let dict = self.responseArr[indexPath.row] as! Dictionary<String,Any>
         let category = dict["category"] as? Int ?? 0
         if category == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Category1TableViewCell", for: indexPath) as! Category1TableViewCell
-            if let title1 = dict["hcard_title_01"] {
-                cell.txt1.text = (title1 as? String ?? "")
-            }
-            if let title2 = dict["hcard_title_02"] {
-                cell.txt2.text = (title2 as? String ?? "")
-            }
-            if let title3 = dict["hcard_title_03"] {
-                cell.txt3.text = (title3 as? String ?? "")
-            }
-            
-            if let image1 = dict["hcard_bgimg_01"] {
-                cell.image1.sd_setImage(with: URL(string: image1 as! String), placeholderImage: nil)
-            }
-            
-            if let image2 = dict["hcard_bgimg_02"] {
-                cell.image2.sd_setImage(with: URL(string: image2 as! String), placeholderImage: nil)
-            }
-            
-            if let image3 = dict["hcard_bgimg_03"] {
-                cell.image3.sd_setImage(with: URL(string: image3 as! String), placeholderImage: nil)
-            }
-            cell.button1.addTarget(self, action: #selector(Btn1Tapped(_:)), for: .touchUpInside)
-            cell.button2.addTarget(self, action: #selector(Btn2Tapped(_:)), for: .touchUpInside)
-            cell.button3.addTarget(self, action: #selector(Btn3Tapped(_:)), for: .touchUpInside)
-            cell.selectionStyle = .none
-            cell.layoutIfNeeded()
-            return cell
+          let cell = tableView.dequeueReusableCell(withIdentifier: "Category1TableViewCell", for: indexPath) as! Category1TableViewCell
+            cell.classDelegat = self
+
+          cell.responseArr = responseArr
+          cell.setCategory1Data(dict: dict)
+          cell.selectionStyle = .none
+          cell.layoutIfNeeded()
+          return cell
         }
         else if category == 2 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Category2TableViewCell", for: indexPath) as! Category2TableViewCell
-           if let title1 = dict["title"] {
-               cell.impLinkLbl.text = (title1 as! String)
-           }
-           cell.viewAllButton.addTarget(self, action: #selector(viewAllButtonTapped(_:)), for: .touchUpInside)
+           let cell = tableView.dequeueReusableCell(withIdentifier: "Category2TableViewCell", for: indexPath) as! Category2TableViewCell
+           
+           cell.responseArr = responseArr
+            cell.setData(dict: dict)
            cell.selectionStyle = .none
            return cell
        }
-         else if category == 3 {
+       else if category == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Category3TableViewCell", for: indexPath) as! Category3TableViewCell
             cell.selectionStyle = .none
             return cell
         }
         else if category == 4 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Category4TableViewCell", for: indexPath) as! Category4TableViewCell
-            cell.lblTag.text = dict["tag"] as? String ?? ""
-            cell.lblTitle.text = dict["title"] as? String ?? ""
-            cell.lblsubTitle.text = dict["subtitle"] as? String ?? ""
-            cell.lblTime.text = dict["hcard_tag_01"] as? String ?? ""
-            cell.lblPhase.text = dict["hcard_tag_02"] as? String ?? ""
-            cell.selectionStyle = .none
+            cell.setData(dict: dict)
             return cell
         }
         else {
@@ -77,36 +51,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
     }
-    /************************Custom Button Click Events *******************/
-    @objc func Btn1Tapped(_ sender: UIButton) {
-        print("Btn1 tapped")
-        let dict = self.responseArr[0] as! Dictionary<String,Any>
-        if let navigate1 = dict["hcard_navigate_01"] {
-            UIApplication.shared.open(URL(string: navigate1 as! String)!, options: [:], completionHandler: nil)
-        }
-    }
     
-    @objc func Btn2Tapped(_ sender: UIButton) {
-        print("Btn2 tapped")
-        let dict = self.responseArr[0] as! Dictionary<String,Any>
-        if let navigate2 = dict["hcard_navigate_02"] {
-            UIApplication.shared.open(URL(string: navigate2 as! String)!, options: [:], completionHandler: nil)
-        }
+    //MARK-: Protocol Method
+    func showPopUpView(imageUrl: String) {
+       // self.alert(message: imageUrl, title: "Hello")
+
+        
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PopUPViewController") as! PopUPViewController
+        nextViewController.imageStr = imageUrl
+        //self.navigationController?.pushViewController(nextViewController, animated: true)
+        self.present(nextViewController, animated:true, completion:nil)
+        
     }
-    @objc func Btn3Tapped(_ sender: UIButton) {
-        print("Btn3 tapped")
-        let dict = self.responseArr[0] as! Dictionary<String,Any>
-        if let navigate3 = dict["hcard_navigate_03"] {
-            UIApplication.shared.open(URL(string: navigate3 as! String)!, options: [:], completionHandler: nil)
-        }
-    }
-    
-    // Selector Methods of Category 2
-    @objc func viewAllButtonTapped(_ sender: UIButton) {
-        let dict = self.responseArr[1] as! Dictionary<String,Any>
-        if let navigate1 = dict["navigate"] {
-            UIApplication.shared.open(URL(string: navigate1 as! String)!, options: [:], completionHandler: nil)
-        }
-    }
+
+   
 }
 

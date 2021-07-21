@@ -11,7 +11,7 @@ import UIKit
 
  extension ViewController {
     /*************************Pull to refresh *******************************/
-    func reloadDataMeyhod() -> Void {
+    func reloadDataMethod() -> Void {
         refreshControl.attributedTitle = NSAttributedString(string: "Reload")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         self.tbl.addSubview(refreshControl)
